@@ -62,5 +62,3 @@ if __name__ == "__main__":
             print 'Problem ' + str(args.problem) + ': ' + str(result)
         except KeyError:
             print 'Problem ' + str(args.problem) + ': Function not found'
-        # except Exception as e:
-        #     print 'Problem ' + str(args.problem) + ': Execution failed (' + str(e) + ')'
