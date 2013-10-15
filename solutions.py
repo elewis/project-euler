@@ -30,6 +30,26 @@ def problem2():
         t0 = t2 + t1
     return total
 
+def problem3():
+    """
+    The prime factors of 13195 are 5, 7, 13 and 29.
+
+    What is the largest prime factor of the number 600851475143 ?
+    """
+    from math import floor, ceil, sqrt
+    number = 600851475143
+
+    def factor(num):
+        for n in xrange(2, int(ceil(sqrt(num)))):
+            if num % n == 0:
+                return n, num / n
+        return None, num
+
+    f1, f2 = 1, number
+    while f1 is not None:
+        f1, f2 = factor(f2)
+    return f2
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('--problem', '-p', type=int,
@@ -42,5 +62,5 @@ if __name__ == "__main__":
             print 'Problem ' + str(args.problem) + ': ' + str(result)
         except KeyError:
             print 'Problem ' + str(args.problem) + ': Function not found'
-        except:
-            print 'Problem ' + str(args.problem) + ': Execution failed'
+        # except Exception as e:
+        #     print 'Problem ' + str(args.problem) + ': Execution failed (' + str(e) + ')'
