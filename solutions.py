@@ -151,6 +151,22 @@ def problem8():
         product = max(product, reduce(lambda x,y: x*y, digits))
     return product
 
+def problem9():
+    """
+    A Pythagorean triplet is a set of three natural numbers, a < b < c, for
+    which, a^2 + b^2 = c^2.
+
+    There exists exactly one Pythagorean triplet for which a + b + c = 1000.
+    Find the product abc.
+    """
+    for a in xrange(1, 334):
+        for b in xrange(a, 667):
+            c = 1000 - a - b
+            if a**2 + b**2 == c**2:
+                return a * b * c
+    return None
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('--problem', '-p', type=int,
