@@ -91,6 +91,15 @@ def problem5():
         i += 20
     return i
 
+def problem6():
+    """
+    Find the difference between the sum of the squares of the first one
+    hundred natural numbers and the square of the sum.
+    """
+    sum_of_sqr = (100 * 101 * 201) / 6
+    sqr_of_sum = (100 * (100 + 1) / 2) ** 2
+    return abs(sum_of_sqr - sqr_of_sum)
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('--problem', '-p', type=int,
