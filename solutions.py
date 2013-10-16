@@ -100,6 +100,25 @@ def problem6():
     sqr_of_sum = (100 * (100 + 1) / 2) ** 2
     return abs(sum_of_sqr - sqr_of_sum)
 
+def problem7():
+    """
+    By listing the first six prime numbers: 2, 3, 5, 7, 11, and 13, we can
+    see that the 6th prime is 13.
+
+    What is the 10 001st prime number?
+    """
+    primes = [2, 3, 5, 7, 11, 13, 17, 19]
+
+    i = 21
+    while len(primes) < 10001:
+        for p in primes:
+            if i % p == 0:
+                break
+        else:
+            primes.append(i)
+        i += 2
+    return primes[-1]
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('--problem', '-p', type=int,
