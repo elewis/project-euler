@@ -73,6 +73,24 @@ def problem4():
                 best = max(best, i * j)
     return best
 
+def problem5():
+    """
+    2520 is the smallest number that can be divided by each of the numbers
+    from 1 to 10 without any remainder.
+
+    What is the smallest positive number that is evenly divisible by all of
+    the numbers from 1 to 20?
+    """
+    i = 20
+    while True:
+        for j in xrange(1, 21):
+            if i % j != 0:
+                break
+        else:
+            return i
+        i += 20
+    return i
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('--problem', '-p', type=int,
