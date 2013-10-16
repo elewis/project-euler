@@ -166,6 +166,23 @@ def problem9():
                 return a * b * c
     return None
 
+def problem10():
+    """
+    The sum of the primes below 10 is 2 + 3 + 5 + 7 = 17.
+
+    Find the sum of all the primes below two million.
+    """
+    limit = 2000000
+    sieve = [True for x in xrange(limit)]
+    total = 0
+
+    for i in xrange(2, limit):
+        if sieve[i]:
+            total += i
+            for j in xrange(i, limit, i):
+                sieve[j] = False
+    return total
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
