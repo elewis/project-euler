@@ -208,12 +208,12 @@ def problem12():
         if divisors > 500:
             return x
 
-def run_problem(problem):
+def run_problem(number):
     try:
-        result = globals()['problem' + str(problem)]()
-        print 'Problem ' + str(problem) + ': ' + str(result)
+        result = globals()['problem' + str(number)]()
+        print 'Problem ' + str(number) + ': ' + str(result)
     except KeyError:
-        print 'Problem ' + str(problem) + ': Function not found'
+        print 'Problem ' + str(number) + ': Function not found'
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
