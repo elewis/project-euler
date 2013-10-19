@@ -221,6 +221,17 @@ def problem16():
         number /= 10
     return total
 
+def problem20():
+    """
+    Find the sum of the digits in the number 100!
+    """
+    number = reduce(lambda x,y: x*y, xrange(1, 101))
+    total = 0
+    while number > 0:
+        total += number % 10
+        number /= 10
+    return total
+
 def run_problem(number):
     try:
         result = globals()['problem' + str(number)]()
