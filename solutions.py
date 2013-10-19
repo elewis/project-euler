@@ -208,6 +208,19 @@ def problem12():
         if divisors > 500:
             return x
 
+def problem16():
+    """
+    215 = 32768 and the sum of its digits is 3 + 2 + 7 + 6 + 8 = 26.
+
+    What is the sum of the digits of the number 21000?
+    """
+    number = 2**1000
+    total = 0
+    while number > 0:
+        total += number % 10
+        number /= 10
+    return total
+
 def run_problem(number):
     try:
         result = globals()['problem' + str(number)]()
