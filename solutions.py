@@ -221,6 +221,38 @@ def problem16():
         number /= 10
     return total
 
+def problem17():
+    """
+    If the numbers 1 to 5 are written out in words: one, two, three, four,
+    five, then there are 3 + 3 + 5 + 4 + 4 = 19 letters used in total.
+
+    If all the numbers from 1 to 1000 (one thousand) inclusive were written
+    out in words, how many letters would be used?
+    """
+    ones = [
+        '', 'one', 'two', 'three', 'four', 'five',
+        'six', 'seven', 'eight', 'nine', 'ten',
+        'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen',
+        'sixteen', 'seventeen', 'eighteen', 'nineteen'
+    ]
+    tens = [
+        '', '', 'twenty', 'thirty', 'forty', 'fifty',
+        'sixty', 'seventy', 'eighty', 'ninety'
+    ]
+    total = 0
+    for i in xrange(1, 1000):
+        word = ''
+        if i >= 100:
+            word += ones[i/100] + 'hundred'
+            if i%100 != 0:
+                word += 'and'
+        if i%100 < 20:
+            word += ones[i%100]
+        else:
+            word += tens[i/10%10] + ones[i%10]
+        total += len(word)
+    return total + 11 # to include 1000
+
 def problem20():
     """
     Find the sum of the digits in the number 100!
