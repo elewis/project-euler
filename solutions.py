@@ -289,6 +289,61 @@ def problem52():
             return i
         i += 1
 
+def problem59():
+    """
+    A modern encryption method is to take a text file, convert the bytes to
+    ASCII, then XOR each byte with a given value, taken from a secret key.
+    The advantage with the XOR function is that using the same encryption
+    key on the cipher text, restores the plain text; for example,
+    65 XOR 42 = 107, then 107 XOR 42 = 65.
+
+    Unfortunately, this method is impractical for most users, so the modified
+    method is to use a password as a key. If the password is shorter than the
+    message, which is likely, the key is repeated cyclically throughout the
+    message. The balance for this method is using a sufficiently long password
+    key for security, but short enough to be memorable.
+
+    Your task has been made easy, as the encryption key consists of three
+    lower case characters. Using cipher1.txt, a file containing the encrypted
+    ASCII codes, and the knowledge that the plain text must contain common
+    English words, decrypt the message and find the sum of the ASCII values
+    in the original text.
+    """
+    import requests
+
+    def keys():
+        alphabet = 'abcdefghijklmnopqrstuvwxyz'
+        for a in alphabet:
+            for b in alphabet:
+                for c in alphabet:
+                    yield ord(a), ord(b), ord(c)
+
+    # Cipher ASCII codes given by the problem
+    cipher = requests.get('http://projecteuler.net/project/cipher1.txt').text
+    cipher = map(int, cipher.strip().split(','))
+
+    # English word dictionary (all uppercase, separated by newlines)
+    english = requests.get('http://inventwithpython.com/dictionary.txt').text
+    english = set(english.strip().split('\n'))
+
+    for key in keys():
+        # Decrypt bytes
+        message, ascii, i = '', [], 0
+        while i < len(cipher):
+            char = cipher[i] ^ key[i % len(key)]
+            message += chr(char)
+            ascii.append(char)
+            i += 1
+
+        # Determine if output is likely english text
+        words = message.split(' ')
+        count = 0
+        for word in words:
+            if word.upper() in english:
+                count += 1
+        if count * 1.0 / len(words) > 0.5:
+            return sum(ascii)
+
 def run_problem(number):
     try:
         result = globals()['problem' + str(number)]()
