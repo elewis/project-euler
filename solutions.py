@@ -264,6 +264,28 @@ def problem20():
         number /= 10
     return total
 
+def problem30():
+    """
+    Find the sum of all the numbers that can be written as the sum of fifth
+    powers of their digits.
+    """
+    powers = [0, 1, 32, 243, 1024, 3125, 7776, 16807, 32768, 59049]
+
+    def digits(number):
+        while number > 0:
+            yield number % 10
+            number /= 10
+
+    total, i = 0, 3
+    while i < 1000000:
+        num_total = 0
+        for d in digits(i):
+            num_total += powers[d]
+        if num_total == i:
+            total += i
+        i += 1
+    return total
+
 def problem34():
     """
     145 is a curious number, as 1! + 4! + 5! = 1 + 24 + 120 = 145.
