@@ -198,7 +198,7 @@ def problem12():
             total += i
 
     for x in triangles():
-        divisors = 2 # - (1, x)
+        divisors = 2 # 1 and x
         for i in xrange(2, int(sqrt(x)+1)):
             if x % i == 0:
                 if x / i == i:
@@ -207,6 +207,17 @@ def problem12():
                     divisors += 2
         if divisors > 500:
             return x
+
+def problem13():
+    """
+    Work out the first ten digits of the sum of the following one-hundred
+    50-digit numbers.
+    """
+    import requests, re
+
+    numbers = requests.get('http://www.projecteuler.net/problem=13').text
+    numbers = map(int, re.findall('([0-9]+)<br', numbers))
+    return str(sum(numbers))[:10]
 
 def problem16():
     """
