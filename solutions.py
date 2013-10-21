@@ -264,6 +264,32 @@ def problem20():
         number /= 10
     return total
 
+def problem34():
+    """
+    145 is a curious number, as 1! + 4! + 5! = 1 + 24 + 120 = 145.
+
+    Find the sum of all numbers which are equal to the sum of the factorial
+    of their digits.
+
+    Note: as 1! = 1 and 2! = 2 are not sums they are not included.
+    """
+    facs = [1, 1, 2, 6, 24, 120, 720, 504, 40320, 362880]
+
+    def digits(number):
+        while number > 0:
+            yield number % 10
+            number /= 10
+
+    total, i = 0, 3
+    while i < 1000000:
+        num_total = 0
+        for d in digits(i):
+            num_total += facs[d]
+        if num_total == i:
+            total += i
+        i += 1
+    return total
+
 def problem52():
     """
     It can be seen that the number, 125874, and its double, 251748, contain
