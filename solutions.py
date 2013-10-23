@@ -300,7 +300,6 @@ def problem14():
         pathlen = sum(1 for _ in seq(i))
         if pathlen > best[1]:
             best = i, pathlen
-            print best
     return best[0]
 
 def problem16():
