@@ -280,6 +280,29 @@ def problem13():
     numbers = map(int, re.findall('([0-9]+)<br', numbers))
     return str(sum(numbers))[:10]
 
+def problem14():
+    """
+    The following iterative sequence is defined for the set of positive integers:
+
+    n => n/2 (n is even)
+    n => 3n + 1 (n is odd)
+
+    Which starting number, under one million, produces the longest chain?
+    """
+    def seq(x):
+        yield x
+        while x > 1:
+            x = x/2 if x % 2 == 0 else 3*x + 1
+            yield x
+
+    best = 1, 1
+    for i in xrange(1, 1000000):
+        pathlen = sum(1 for _ in seq(i))
+        if pathlen > best[1]:
+            best = i, pathlen
+            print best
+    return best[0]
+
 def problem16():
     """
     215 = 32768 and the sum of its digits is 3 + 2 + 7 + 6 + 8 = 26.
@@ -383,6 +406,32 @@ def problem34():
             total += i
         i += 1
     return total
+
+def problem50():
+    """
+    Which prime, below one-million, can be written as the sum of the most consecutive primes?
+    """
+    limit = 1000000
+    sieve = [True for x in xrange(limit)]
+    primes = []
+
+    for i in xrange(2, limit):
+        if sieve[i]:
+            primes.append(i)
+            for j in xrange(2*i, limit, i):
+                sieve[j] = False
+
+    primeset = set(primes)
+    best = (1, 1)
+    for i in xrange(len(primes)):
+        total = 0
+        for j in xrange(i, len(primes)):
+            total += primes[j]
+            if total >= limit:
+                break
+            elif total in primeset and j-i > best[1]:
+                best = total, j-i
+    return best[0]
 
 def problem52():
     """
