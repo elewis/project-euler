@@ -400,6 +400,52 @@ def problem18():
         depth -= 1
     return triangle[0][0]
 
+def problem19():
+    """
+    You are given the following information, but you may prefer to do some
+    research for yourself.
+
+        1 Jan 1900 was a Monday.
+        Thirty days has September,
+        April, June and November.
+        All the rest have thirty-one,
+        Saving February alone,
+        Which has twenty-eight, rain or shine.
+        And on leap years, twenty-nine.
+        A leap year occurs on any year evenly divisible by 4, but not on a
+            century unless it is divisible by 400.
+
+    How many Sundays fell on the first of the month during the twentieth
+    century (1 Jan 1901 to 31 Dec 2000)?
+    """
+    months = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+    leap   = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+
+    def is_leap_year(year):
+        if year % 100 == 0:
+            return year % 400 == 0
+        else:
+            return year % 4 == 0
+
+    def is_sunday(day, month, year): # [0-max], [0-11], YYYY
+        day_offset = 1 # sequence starts on a monday
+        for nyear in xrange(1900, year):
+            day_offset += 366 if is_leap_year(nyear) else 365
+
+        if is_leap_year(year):
+            day_offset += sum(leap[:month]) + day
+        else:
+            day_offset += sum(months[:month]) + day
+
+        return day_offset % 7 == 0
+
+    sundays = 0
+    for year in xrange(1901, 2001):
+        for month in xrange(0, 12):
+            if is_sunday(0, month, year):
+                sundays += 1
+    return sundays
+
 def problem20():
     """
     Find the sum of the digits in the number 100!
