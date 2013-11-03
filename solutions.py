@@ -565,6 +565,33 @@ def problem59():
         if count * 1.0 / len(words) > 0.5:
             return sum(ascii)
 
+def problem67():
+    """
+    By starting at the top of the triangle below and moving to adjacent
+    numbers on the row below, the maximum total from top to bottom is 23.
+
+    Find the maximum total from top to bottom in triangle.txt, a 15K text
+    file containing a triangle with one-hundred rows.
+
+    NOTE: This is a much more difficult version of problem 18.
+    """
+    import requests
+
+    triangle = []
+    rows = requests.get('http://projecteuler.net/project/triangle.txt').text
+    rows = rows.strip().split('\n')
+    for row in rows:
+        triangle.append(map(int, row.split(' ')))
+
+    # Destructive dynamic programming, bubbles up max path length
+    depth = len(triangle)-2
+    while depth >= 0:
+        row, children = triangle[depth], triangle[depth+1]
+        for i in xrange(len(row)):
+            row[i] += max(children[i], children[i+1])
+        depth -= 1
+    return triangle[0][0]
+
 def run_problem(number):
     try:
         result = globals()['problem' + str(number)]()
