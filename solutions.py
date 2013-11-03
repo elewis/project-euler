@@ -302,11 +302,30 @@ def problem14():
             best = i, pathlen
     return best[0]
 
+def problem15():
+    """
+    Starting in the top left corner of a 2x2 grid, and only being able to move
+    to the right and down, there are exactly 6 routes to the bottom right corner.
+
+    How many such routes are there through a 20x20 grid?
+    """
+    dimension = 20,20
+    grid = [[0 for x in xrange(dimension[0]+1)] for y in xrange(dimension[1]+1)]
+    for x in xrange(dimension[0]+1):
+        grid[x][0] = 1
+    for y in xrange(dimension[1]+1):
+        grid[0][y] = 1
+
+    for i in xrange(1, dimension[0]+1):
+        for j in xrange(1, dimension[1]+1):
+            grid[i][j] = grid[i-1][j] + grid[i][j-1]
+    return grid[dimension[0]][dimension[1]]
+
 def problem16():
     """
     215 = 32768 and the sum of its digits is 3 + 2 + 7 + 6 + 8 = 26.
 
-    What is the sum of the digits of the number 21000?
+    What is the sum of the digits of the number 2^1000?
     """
     number = 2**1000
     total = 0
@@ -528,5 +547,5 @@ if __name__ == "__main__":
     if args.problem:
         run_problem(args.problem)
     else:
-        for i in xrange(1, 30):
+        for i in xrange(1, 200):
             run_problem(i)
