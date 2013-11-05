@@ -483,6 +483,34 @@ def problem21():
             sieve[j].append(i)
     return total
 
+def problem22():
+    """
+    Using names.txt, a 46K text file containing over five-thousand first
+    names, begin by sorting it into alphabetical order. Then working out
+    the alphabetical value for each name, multiply this value by its
+    alphabetical position in the list to obtain a name score.
+
+    For example, when the list is sorted into alphabetical order, COLIN,
+    which is worth 3 + 15 + 12 + 9 + 14 = 53, is the 938th name in the list.
+    So, COLIN would obtain a score of 938 x 53 = 49714.
+
+    What is the total of all the name scores in the file?
+    """
+    import requests
+
+    names = requests.get('http://www.projecteuler.net/project/names.txt').text
+    names = map(lambda name: name[1:-1], names.strip().split(','))
+    names.sort()
+
+    def score(name):
+        ascii_offset = 96
+        name = list(name.lower())
+        return sum(map(lambda c: ord(c) - ascii_offset, name))
+
+    total = 0
+    for i in xrange(len(names)):
+        total += score(names[i]) * (i+1)
+    return total
 
 def problem30():
     """
