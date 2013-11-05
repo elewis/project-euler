@@ -544,6 +544,26 @@ def problem23():
             total += i
     return total
 
+def problem24():
+    """
+    What is the millionth lexicographic permutation of the digits
+    0, 1, 2, 3, 4, 5, 6, 7, 8 and 9?
+    """
+    limit = 1000000
+
+    def permutations(digits):
+        if len(digits) > 0:
+            for i in xrange(len(digits)):
+                for p in permutations(digits[:i] + digits[i+1:]):
+                    yield digits[i] + p
+        else:
+            yield ''
+
+    permute = permutations('0123456789')
+    for j in xrange(limit - 1):
+        next(permute)
+    return next(permute)
+
 def problem30():
     """
     Find the sum of all the numbers that can be written as the sum of fifth
