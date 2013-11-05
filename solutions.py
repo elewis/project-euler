@@ -564,6 +564,22 @@ def problem24():
         next(permute)
     return next(permute)
 
+def problem25():
+    """
+    What is the first term in the Fibonacci sequence to contain 1000 digits?
+    """
+
+    def fib():
+        f0, f1 = 0, 1
+        yield 1
+        while True:
+            yield f1 + f0
+            f1, f0 = f1 + f0, f1
+
+    for i, n in enumerate(fib()):
+        if len(str(n)) == 1000:
+            return i + 1
+
 def problem30():
     """
     Find the sum of all the numbers that can be written as the sum of fifth
