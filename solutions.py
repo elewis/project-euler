@@ -512,6 +512,38 @@ def problem22():
         total += score(names[i]) * (i+1)
     return total
 
+def problem23():
+    """
+    A perfect number is a number for which the sum of its proper divisors is
+    exactly equal to the number. For example, the sum of the proper divisors
+    of 28 would be 1 + 2 + 4 + 7 + 14 = 28, which means that 28 is a perfect
+    number.
+
+    A number n is called deficient if the sum of its proper divisors is less
+    than n and it is called abundant if this sum exceeds n.
+
+    Find the sum of all the positive integers which cannot be written as the
+    sum of two abundant numbers.
+    """
+    limit = 28123
+    sieve = [[] for i in xrange(limit)]
+    abundant = set()
+
+    for i in xrange(1, limit):
+        if sieve[i] and sum(sieve[i]) > i:
+            abundant.add(i)
+        for j in xrange(2 * i, limit, i):
+            sieve[j].append(i)
+
+    total = 0
+    for i in xrange(1, limit):
+        for j in abundant:
+            if i - j in abundant:
+                break
+        else:
+            total += i
+    return total
+
 def problem30():
     """
     Find the sum of all the numbers that can be written as the sum of fifth
