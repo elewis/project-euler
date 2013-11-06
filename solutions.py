@@ -613,6 +613,24 @@ def problem30():
         i += 1
     return total
 
+def problem31():
+    """
+    How many different ways can 2 pounds be made using any number of coins?
+    """
+    coins = (1, 2, 5, 10, 20, 50, 100, 200)
+    amount = 200
+    table = [[0 for c in xrange(amount+1)] for i in xrange(len(coins))]
+
+    for c in xrange(amount+1):
+        for i in xrange(len(coins)):
+            if c - coins[i] < 0:
+                table[i][c] = table[i - 1][c]
+            elif c - coins[i] == 0:
+                table[i][c] = table[i - 1][c] + 1
+            else:
+                table[i][c] = table[i][c - coins[i]] + table[i - 1][c]
+    return table[-1][-1]
+
 def problem34():
     """
     145 is a curious number, as 1! + 4! + 5! = 1 + 24 + 120 = 145.
