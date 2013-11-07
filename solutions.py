@@ -631,6 +631,36 @@ def problem31():
                 table[i][c] = table[i][c - coins[i]] + table[i - 1][c]
     return table[-1][-1]
 
+def problem32():
+    """
+    We shall say that an n-digit number is pandigital if it makes use of all
+    the digits 1 to n exactly once; for example, the 5-digit number, 15234,
+    is 1 through 5 pandigital.
+
+    The product 7254 is unusual, as the identity, 39 x 186 = 7254, containing
+    multiplicand, multiplier, and product is 1 through 9 pandigital.
+
+    Find the sum of all products whose multiplicand/multiplier/product
+    identity can be written as a 1 through 9 pandigital.
+    """
+
+    def permutations(digits):
+        if len(digits) > 0:
+            for i in xrange(len(digits)):
+                for p in permutations(digits[:i] + digits[i+1:]):
+                    yield digits[i] + p
+        else:
+            yield ''
+
+    product_set = set()
+    for p in permutations('123456789'):
+        for i in xrange(1, len(p) / 3 + 1):
+            for j in xrange(i + 1, len(p) / 3 * 2 + 1):
+                triplet = int(p[:i]), int(p[i:j]), int(p[j:])
+                if triplet[0] * triplet[1] == triplet[2]:
+                    product_set.add(triplet[2])
+    return sum(product_set)
+
 def problem34():
     """
     145 is a curious number, as 1! + 4! + 5! = 1 + 24 + 120 = 145.
