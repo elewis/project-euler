@@ -657,6 +657,37 @@ def problem34():
         i += 1
     return total
 
+def problem35():
+    """
+    The number, 197, is called a circular prime because all rotations of the
+    digits: 197, 971, and 719, are themselves prime.
+
+    There are thirteen such primes below 100: 2, 3, 5, 7, 11, 13, 17, 31, 37,
+    71, 73, 79, and 97.
+
+    How many circular primes are there below one million?
+    """
+    limit = 1000000
+    sieve = [True for x in xrange(limit)]
+
+    def rotations(digits):
+        for i in xrange(len(digits)):
+            yield digits[i:] + digits[:i]
+
+    for i in xrange(2, limit):
+        for j in xrange(i * 2, limit, i):
+            sieve[j] = False
+
+    count = 0
+    for i in xrange(2, limit):
+        if sieve[i]:
+            for p in rotations(str(i)):
+                if not sieve[int(p)]:
+                    break
+            else:
+                count += 1
+    return count
+
 def problem50():
     """
     Which prime, below one-million, can be written as the sum of the most consecutive primes?
