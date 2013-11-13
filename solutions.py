@@ -718,6 +718,28 @@ def problem35():
                 count += 1
     return count
 
+def problem39():
+    """
+    If p is the perimeter of a right angle triangle with integral length sides, {a,b,c}, there are exactly three solutions for p = 120.
+
+    {20,48,52}, {24,45,51}, {30,40,50}
+
+    For which value of p <= 1000, is the number of solutions maximised?
+    """
+    limit = 1000
+    best = 0, 0
+
+    for p in xrange(1, limit + 1):
+        solutions = 0
+        for a in xrange(1, p/3 + 1):
+            for b in xrange(a + 1, p/2):
+                c = p - b - a
+                if a ** 2 + b ** 2 == c ** 2:
+                    solutions += 1
+        if solutions > best[0]:
+            best = solutions, p
+    return best[1]
+
 def problem50():
     """
     Which prime, below one-million, can be written as the sum of the most consecutive primes?
