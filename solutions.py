@@ -737,6 +737,37 @@ def problem36():
             total += i
     return total
 
+def problem37():
+    """
+    Find the sum of the only eleven primes that are both truncatable from
+    left to right and right to left.
+    """
+    limit = 1000000
+    total = 0
+    sieve = [True for x in xrange(limit)]
+
+    def is_truncatable(i):
+        left = right = str(i)
+        while len(left) > 0 and len(right) > 0:
+            if not is_prime(int(left)) or not is_prime(int(right)):
+                return False
+            else:
+                left, right = left[1:], right[:-1]
+        return True
+
+    def is_prime(i):
+        return sieve[i]
+
+    sieve[0] = False
+    sieve[1] = False
+    for i in xrange(2, limit):
+        for j in xrange(i * 2, limit, i):
+            sieve[j] = False
+
+    for i in xrange(11, limit, 2):
+        if is_truncatable(i):
+            total += i
+    return total
 
 def problem39():
     """
