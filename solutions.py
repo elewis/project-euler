@@ -718,9 +718,30 @@ def problem35():
                 count += 1
     return count
 
+def problem36():
+    """
+    Find the sum of all numbers, less than one million, which are palindromic
+    in base 10 and base 2.
+    """
+    limit = 1000000
+    total = 0
+
+    def is_palindrome(num_str):
+        for i in xrange(len(num_str) / 2):
+            if num_str[i] != num_str[-1 - i]:
+                return False
+        return True
+
+    for i in xrange(limit):
+        if is_palindrome(str(i)) and is_palindrome(bin(i)[2:]):
+            total += i
+    return total
+
+
 def problem39():
     """
-    If p is the perimeter of a right angle triangle with integral length sides, {a,b,c}, there are exactly three solutions for p = 120.
+    If p is the perimeter of a right angle triangle with integral length sides,
+    {a,b,c}, there are exactly three solutions for p = 120.
 
     {20,48,52}, {24,45,51}, {30,40,50}
 
