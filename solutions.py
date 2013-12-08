@@ -580,6 +580,32 @@ def problem25():
         if len(str(n)) == 1000:
             return i + 1
 
+def problem26():
+    """
+    Find the value of d < 1000 for which 1/d contains the longest recurring
+    cycle in its decimal fraction part.
+    """
+    limit = 1000
+    best = 0, 0
+
+    def cycle(d):
+        remainders, r = {}, 1
+        length = 0
+
+        while r > 0 and r not in remainders:
+            remainders[r] = length
+            r = (r * 10) % d
+            length += 1
+        return length
+
+    for i in xrange(1, limit):
+        length = cycle(i)
+        if length > best[0]:
+            best = length, i
+            if best[0] >= limit:
+                break
+    return best[1] # Problem statement is find d, not cycle length
+
 def problem28():
     """
     Starting with the number 1 and moving to the right in a clockwise
