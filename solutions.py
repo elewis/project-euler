@@ -717,6 +717,51 @@ def problem32():
                     product_set.add(triplet[2])
     return sum(product_set)
 
+def problem33():
+    """
+    The fraction 49/98 is a curious fraction, as an inexperienced
+    mathematician in attempting to simplify it may incorrectly believe
+    that 49/98 = 4/8, which is correct, is obtained by cancelling the 9s.
+
+    We shall consider fractions like, 30/50 = 3/5, to be trivial examples.
+
+    There are exactly four non-trivial examples of this type of fraction,
+    less than one in value, and containing two digits in the numerator and
+    denominator.
+
+    If the product of these four fractions is given in its lowest common
+    terms, find the value of the denominator.
+    """
+    from fractions import Fraction
+
+    keep = []
+
+    for numer in xrange(10, 100):
+        for denom in xrange(numer + 1, 100):
+
+            if (numer % 10 == 0 and denom % 10 == 0) or\
+               (numer % 11 == 0 and denom % 11 == 0):
+                continue
+
+            ndigits = [numer // 10, numer % 10]
+            ddigits = [denom // 10, denom % 10]
+
+            if ndigits[0] in ddigits:
+                ddigits.remove(ndigits[0])
+                ndigits.remove(ndigits[0])
+            elif ndigits[1] in ddigits:
+                ddigits.remove(ndigits[1])
+                ndigits.remove(ndigits[1])
+            else:
+                continue
+
+            if ddigits[0] != 0 and\
+                Fraction(ndigits[0], ddigits[0]) == Fraction(numer, denom):
+                keep.append(Fraction(numer, denom))
+
+    return reduce(lambda x,y: x*y, keep).denominator
+
+
 def problem34():
     """
     145 is a curious number, as 1! + 4! + 5! = 1 + 24 + 120 = 145.
