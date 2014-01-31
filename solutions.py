@@ -930,13 +930,15 @@ def problem39():
 
 def problem40():
     """
-    An irrational decimal fraction is created by concatenating the positive integers:
+    An irrational decimal fraction is created by concatenating the positive
+    integers:
 
     0.123456789101112131415161718192021...
 
     It can be seen that the 12th digit of the fractional part is 1.
 
-    If dn represents the nth digit of the fractional part, find the value of the following expression.
+    If dn represents the nth digit of the fractional part, find the value
+    of the following expression.
 
     d1 x d10 x d100 x d1000 x d10000 x d100000 x d1000000
     """
@@ -947,9 +949,51 @@ def problem40():
     digits = map(int, [d[0], d[9], d[99], d[999], d[9999], d[99999], d[999999]])
     return reduce(lambda x,y: x*y, digits)
 
+def problem41():
+    """
+    We shall say that an n-digit number is pandigital if it makes use of
+    all the digits 1 to n exactly once. For example, 2143 is a 4-digit
+    pandigital and is also prime.
+
+    What is the largest n-digit pandigital prime that exists?
+    """
+    from random import randint
+
+    def permutations(digits):
+        if len(digits) > 0:
+            for i in xrange(len(digits)):
+                for p in permutations(digits[:i] + digits[i+1:]):
+                    yield digits[i] + p
+        else:
+            yield ''
+
+    def gcd(a, b):
+        while b != 0:
+            a, b = b, a % b
+        return a
+
+    def is_prime(n):
+        if pow(2, n, n) != 2:
+            return False
+        for i in xrange(50):
+            a = randint(2, n-1)
+            if gcd(n, a) == 1 and pow(a, n-1, n) != 1:
+                return False
+        return True
+
+    best = 2143
+    for j in xrange(1, 10):
+        for i in permutations(''.join(map(str, xrange(1, j+1)))):
+            i = int(i)
+            if i > best:
+                if is_prime(i):
+                    best = i
+    return best
+
 def problem50():
     """
-    Which prime, below one-million, can be written as the sum of the most consecutive primes?
+    Which prime, below one-million, can be written as the sum of the most
+    consecutive primes?
     """
     limit = 1000000
     sieve = [True for x in xrange(limit)]
