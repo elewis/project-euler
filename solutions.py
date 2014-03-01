@@ -1074,6 +1074,38 @@ def problem43():
             total += int(digits)
     return total
 
+def problem48():
+    """
+    The series, 1^1 + 2^2 + 3^3 + ... + 10^10 = 10405071317.
+
+    Find the last ten digits of the series, 1^1 + 2^2 + 3^3 + ... + 1000^1000.
+    """
+    N = 10**10
+    return sum([pow(i, i, N) for i in xrange(1, 1001)]) % N
+
+def problem49():
+    """
+    The arithmetic sequence, 1487, 4817, 8147, in which each of the terms
+    increases by 3330, is unusual in two ways: (i) each of the three terms
+    are prime, and, (ii) each of the 4-digit numbers are permutations of
+    one another.
+
+    There are no arithmetic sequences made up of three 1-, 2-, or 3-digit
+    primes, exhibiting this property, but there is one other 4-digit
+    increasing sequence.
+
+    What 12-digit number do you form by concatenating the three terms in
+    this sequence?
+    """
+
+    def permutations(digits):
+        if len(digits) > 0:
+            for i in xrange(len(digits)):
+                for p in permutations(digits[:i] + digits[i+1:]):
+                    yield digits[i] + p
+        else:
+            yield ''
+
 def problem50():
     """
     Which prime, below one-million, can be written as the sum of the most
