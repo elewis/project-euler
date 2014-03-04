@@ -608,6 +608,42 @@ def problem26():
                 break
     return best[1] # Problem statement is find d, not cycle length
 
+def problem27():
+    """
+    Considering the quadratic formula n^2 + an + b where |a| < 1000 and
+    |b| < 1000, find the product of the coefficients, a and b, for the
+    quadratic expression that produces the maximum number of primes for
+    consecutive values of n, starting with n = 0.
+    """
+    limit = 1000
+    sieve = [True for x in xrange(limit)]
+    primes   = []
+    primeset = set()
+
+    for i in xrange(2, limit):
+        for j in xrange(i * 2, limit, i):
+            sieve[j] = False
+    for i in xrange(len(sieve)):
+        if sieve[i]:
+            primes.append(i)
+            primeset.add(i)
+
+    def quad(a, b):
+        return lambda n: n**2 + a*n + b
+
+    max_n = 0
+    max_coef = 0, 0
+    for a in xrange(-1000, 1000):
+        for b in primes:
+            q = quad(a, b)
+            n = 0
+            while q(n) in primeset:
+                n += 1
+            if n > max_n:
+                max_n = n
+                max_coef = a, b
+    return max_coef[0] * max_coef[1]
+
 def problem28():
     """
     Starting with the number 1 and moving to the right in a clockwise
