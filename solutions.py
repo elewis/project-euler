@@ -1166,6 +1166,57 @@ def problem45():
             return new_t
         n += 1
 
+def problem47():
+    """
+    The first two consecutive numbers to have two distinct prime factors are:
+
+    14 = 2 x 7
+    15 = 3 x 5
+
+    The first three consecutive numbers to have three distinct prime factors are:
+
+    644 = 2^2 x 7 x 23
+    645 = 3 x 5 x 43
+    646 = 2 x 17 x 19.
+
+    Find the first four consecutive integers to have four distinct prime factors. What is the first of these numbers?
+    """
+    limit = 1000000
+    fcount = 4
+    sieve = [True for x in xrange(limit)]
+    primes   = []
+    primeset = set()
+
+    for i in xrange(2, limit):
+        for j in xrange(i * 2, limit, i):
+            sieve[j] = False
+    for i in xrange(2, len(sieve)):
+        if sieve[i]:
+            primes.append(i)
+            primeset.add(i)
+
+    i = 3
+    count = 0
+    while i < limit:
+        j = i
+        factors = set()
+        while j not in primeset:
+            for p in primes:
+                if j % p == 0:
+                    factors.add(p)
+                    j /= p
+                    break
+        factors.add(j)
+
+        if len(factors) != fcount:
+            count = 0
+        else:
+            count += 1
+
+        if count == fcount:
+            return i - fcount + 1
+
+        i += 1
 
 def problem48():
     """
