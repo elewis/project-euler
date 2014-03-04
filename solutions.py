@@ -1166,6 +1166,52 @@ def problem45():
             return new_t
         n += 1
 
+def problem46():
+    """
+    It was proposed by Christian Goldbach that every odd composite number can
+    be written as the sum of a prime and twice a square.
+
+    9  = 7  + 2x1^2
+    15 = 7  + 2x2^2
+    21 = 3  + 2x3^2
+    25 = 7  + 2x3^2
+    27 = 19 + 2x2^2
+    33 = 31 + 2x1^2
+
+    It turns out that the conjecture was false.
+
+    What is the smallest odd composite that cannot be written as the sum of
+    a prime and twice a square?
+    """
+    limit    = 10000
+    sieve    = [True  for i in xrange(limit)]
+    dsquares = [2*i*i for i in xrange(1, limit)]
+    primes   = []
+    primeset = set()
+
+    for i in xrange(2, limit):
+        for j in xrange(i * 2, limit, i):
+            sieve[j] = False
+    for i in xrange(len(sieve)):
+        if sieve[i]:
+            primes.append(i)
+            primeset.add(i)
+
+    def is_goldbach(i):
+        for p in primes:
+            if p > i:
+                return False
+            for ds in dsquares:
+                if i == p + ds:
+                    return True
+                elif i < p + ds:
+                    break
+        return False
+
+    for i in xrange(3, limit, 2):
+        if i not in primeset and not is_goldbach(i):
+            return i
+
 def problem47():
     """
     The first two consecutive numbers to have two distinct prime factors are:
@@ -1179,7 +1225,8 @@ def problem47():
     645 = 3 x 5 x 43
     646 = 2 x 17 x 19.
 
-    Find the first four consecutive integers to have four distinct prime factors. What is the first of these numbers?
+    Find the first four consecutive integers to have four distinct prime factors.
+    What is the first of these numbers?
     """
     limit = 1000000
     fcount = 4
