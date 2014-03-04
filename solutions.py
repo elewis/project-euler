@@ -1288,6 +1288,18 @@ def problem49():
     What 12-digit number do you form by concatenating the three terms in
     this sequence?
     """
+    limit = 10000
+    sieve = [True for x in xrange(limit)]
+    primes   = []
+    primeset = set()
+
+    for i in xrange(2, limit):
+        for j in xrange(i * 2, limit, i):
+            sieve[j] = False
+    for i in xrange(2, len(sieve)):
+        if sieve[i]:
+            primes.append(i)
+            primeset.add(i)
 
     def permutations(digits):
         if len(digits) > 0:
@@ -1296,6 +1308,15 @@ def problem49():
                     yield digits[i] + p
         else:
             yield ''
+
+    for a in primes:
+        permset = set([int(x) for x in permutations(str(a))])
+        for b in permutations(str(a)):
+            b = int(b)
+            if b > a and b in primeset:
+                c = b + (b-a)
+                if c in primeset and c in permset and c != 8147:
+                    return "{}{}{}".format(a, b, c)
 
 def problem50():
     """
