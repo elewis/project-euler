@@ -1,6 +1,7 @@
 #!usr/bin/env python
 
 import argparse
+import util
 
 def problem1():
     """
@@ -175,15 +176,8 @@ def problem10():
     Find the sum of all the primes below two million.
     """
     limit = 2000000
-    sieve = [True for x in xrange(limit)]
-    total = 0
-
-    for i in xrange(2, limit):
-        if sieve[i]:
-            total += i
-            for j in xrange(i, limit, i):
-                sieve[j] = False
-    return total
+    primes, primeset = util.primes(limit)
+    return sum(primes)
 
 def problem11():
     """
@@ -329,12 +323,7 @@ def problem16():
 
     What is the sum of the digits of the number 2^1000?
     """
-    number = 2**1000
-    total = 0
-    while number > 0:
-        total += number % 10
-        number /= 10
-    return total
+    return sum(util.digits(2**1000))
 
 def problem17():
     """
@@ -452,12 +441,8 @@ def problem20():
     """
     Find the sum of the digits in the number 100!
     """
-    number = reduce(lambda x,y: x*y, xrange(1, 101))
-    total = 0
-    while number > 0:
-        total += number % 10
-        number /= 10
-    return total
+    n = reduce(lambda x,y: x*y, xrange(1, 101))
+    return sum(util.digits(n))
 
 def problem21():
     """
@@ -552,16 +537,7 @@ def problem24():
     0, 1, 2, 3, 4, 5, 6, 7, 8 and 9?
     """
     limit = 1000000
-
-    def permutations(digits):
-        if len(digits) > 0:
-            for i in xrange(len(digits)):
-                for p in permutations(digits[:i] + digits[i+1:]):
-                    yield digits[i] + p
-        else:
-            yield ''
-
-    permute = permutations('0123456789')
+    permute = util.permutations('0123456789')
     for j in xrange(limit - 1):
         next(permute)
     return next(permute)
@@ -616,17 +592,7 @@ def problem27():
     consecutive values of n, starting with n = 0.
     """
     limit = 1000
-    sieve = [True for x in xrange(limit)]
-    primes   = []
-    primeset = set()
-
-    for i in xrange(2, limit):
-        for j in xrange(i * 2, limit, i):
-            sieve[j] = False
-    for i in xrange(len(sieve)):
-        if sieve[i]:
-            primes.append(i)
-            primeset.add(i)
+    primes, primeset = util.primes(limit)
 
     def quad(a, b):
         return lambda n: n**2 + a*n + b
@@ -691,16 +657,10 @@ def problem30():
     powers of their digits.
     """
     powers = [0, 1, 32, 243, 1024, 3125, 7776, 16807, 32768, 59049]
-
-    def digits(number):
-        while number > 0:
-            yield number % 10
-            number /= 10
-
     total, i = 0, 3
     while i < 1000000:
         num_total = 0
-        for d in digits(i):
+        for d in util.digits(i):
             num_total += powers[d]
         if num_total == i:
             total += i
@@ -737,17 +697,8 @@ def problem32():
     Find the sum of all products whose multiplicand/multiplier/product
     identity can be written as a 1 through 9 pandigital.
     """
-
-    def permutations(digits):
-        if len(digits) > 0:
-            for i in xrange(len(digits)):
-                for p in permutations(digits[:i] + digits[i+1:]):
-                    yield digits[i] + p
-        else:
-            yield ''
-
     product_set = set()
-    for p in permutations('123456789'):
+    for p in util.permutations('123456789'):
         for i in xrange(1, len(p) / 3 + 1):
             for j in xrange(i + 1, len(p) / 3 * 2 + 1):
                 triplet = int(p[:i]), int(p[i:j]), int(p[j:])
@@ -810,16 +761,10 @@ def problem34():
     Note: as 1! = 1 and 2! = 2 are not sums they are not included.
     """
     facs = [1, 1, 2, 6, 24, 120, 720, 504, 40320, 362880]
-
-    def digits(number):
-        while number > 0:
-            yield number % 10
-            number /= 10
-
     total, i = 0, 3
     while i < 1000000:
         num_total = 0
-        for d in digits(i):
+        for d in util.digits(i):
             num_total += facs[d]
         if num_total == i:
             total += i
@@ -837,21 +782,17 @@ def problem35():
     How many circular primes are there below one million?
     """
     limit = 1000000
-    sieve = [True for x in xrange(limit)]
+    primes, primeset = util.primes(limit)
 
     def rotations(digits):
         for i in xrange(len(digits)):
             yield digits[i:] + digits[:i]
 
-    for i in xrange(2, limit):
-        for j in xrange(i * 2, limit, i):
-            sieve[j] = False
-
     count = 0
     for i in xrange(2, limit):
-        if sieve[i]:
+        if i in primeset:
             for p in rotations(str(i)):
-                if not sieve[int(p)]:
+                if int(p) not in primeset:
                     break
             else:
                 count += 1
@@ -883,25 +824,16 @@ def problem37():
     """
     limit = 1000000
     total = 0
-    sieve = [True for x in xrange(limit)]
+    primes, primeset = util.primes(limit)
 
     def is_truncatable(i):
         left = right = str(i)
         while len(left) > 0 and len(right) > 0:
-            if not is_prime(int(left)) or not is_prime(int(right)):
+            if int(left) not in primeset or int(right) not in primeset:
                 return False
             else:
                 left, right = left[1:], right[:-1]
         return True
-
-    def is_prime(i):
-        return sieve[i]
-
-    sieve[0] = False
-    sieve[1] = False
-    for i in xrange(2, limit):
-        for j in xrange(i * 2, limit, i):
-            sieve[j] = False
 
     for i in xrange(11, limit, 2):
         if is_truncatable(i):
@@ -997,31 +929,18 @@ def problem41():
     """
     from random import randint
 
-    def permutations(digits):
-        if len(digits) > 0:
-            for i in xrange(len(digits)):
-                for p in permutations(digits[:i] + digits[i+1:]):
-                    yield digits[i] + p
-        else:
-            yield ''
-
-    def gcd(a, b):
-        while b != 0:
-            a, b = b, a % b
-        return a
-
     def is_prime(n):
         if pow(2, n, n) != 2:
             return False
         for i in xrange(50):
             a = randint(2, n-1)
-            if gcd(n, a) == 1 and pow(a, n-1, n) != 1:
+            if util.gcd(n, a) == 1 and pow(a, n-1, n) != 1:
                 return False
         return True
 
     best = 2143
     for j in xrange(1, 10):
-        for i in permutations(''.join(map(str, xrange(1, j+1)))):
+        for i in util.permutations(''.join(map(str, xrange(1, j+1)))):
             i = int(i)
             if i > best:
                 if is_prime(i):
@@ -1093,18 +1012,9 @@ def problem43():
 
     Find the sum of all 0 to 9 pandigital numbers with this property.
     """
-
-    def permutations(digits):
-        if len(digits) > 0:
-            for i in xrange(len(digits)):
-                for p in permutations(digits[:i] + digits[i+1:]):
-                    yield digits[i] + p
-        else:
-            yield ''
-
     factors = 2, 3, 5, 7, 11, 13, 17
     total = 0
-    for digits in permutations('0123456789'):
+    for digits in util.permutations('0123456789'):
         for i in xrange(1, 8):
             if int(digits[i:i+3]) % factors[i-1] != 0:
                 break
@@ -1184,18 +1094,8 @@ def problem46():
     a prime and twice a square?
     """
     limit    = 10000
-    sieve    = [True  for i in xrange(limit)]
     dsquares = [2*i*i for i in xrange(1, limit)]
-    primes   = []
-    primeset = set()
-
-    for i in xrange(2, limit):
-        for j in xrange(i * 2, limit, i):
-            sieve[j] = False
-    for i in xrange(len(sieve)):
-        if sieve[i]:
-            primes.append(i)
-            primeset.add(i)
+    primes, primeset = util.primes(limit)
 
     def is_goldbach(i):
         for p in primes:
@@ -1230,17 +1130,7 @@ def problem47():
     """
     limit = 1000000
     fcount = 4
-    sieve = [True for x in xrange(limit)]
-    primes   = []
-    primeset = set()
-
-    for i in xrange(2, limit):
-        for j in xrange(i * 2, limit, i):
-            sieve[j] = False
-    for i in xrange(2, len(sieve)):
-        if sieve[i]:
-            primes.append(i)
-            primeset.add(i)
+    primes, primeset = util.primes(limit)
 
     i = 3
     count = 0
@@ -1249,7 +1139,7 @@ def problem47():
         factors = set()
         while j not in primeset:
             for p in primes:
-                if j % p == 0:
+                if p > 1 and j % p == 0:
                     factors.add(p)
                     j /= p
                     break
@@ -1289,29 +1179,11 @@ def problem49():
     this sequence?
     """
     limit = 10000
-    sieve = [True for x in xrange(limit)]
-    primes   = []
-    primeset = set()
-
-    for i in xrange(2, limit):
-        for j in xrange(i * 2, limit, i):
-            sieve[j] = False
-    for i in xrange(2, len(sieve)):
-        if sieve[i]:
-            primes.append(i)
-            primeset.add(i)
-
-    def permutations(digits):
-        if len(digits) > 0:
-            for i in xrange(len(digits)):
-                for p in permutations(digits[:i] + digits[i+1:]):
-                    yield digits[i] + p
-        else:
-            yield ''
+    primes, primeset = util.primes(limit)
 
     for a in primes:
-        permset = set([int(x) for x in permutations(str(a))])
-        for b in permutations(str(a)):
+        permset = set([int(x) for x in util.permutations(str(a))])
+        for b in util.permutations(str(a)):
             b = int(b)
             if b > a and b in primeset:
                 c = b + (b-a)
@@ -1324,16 +1196,8 @@ def problem50():
     consecutive primes?
     """
     limit = 1000000
-    sieve = [True for x in xrange(limit)]
-    primes = []
+    primes, primeset = util.primes(limit)
 
-    for i in xrange(2, limit):
-        if sieve[i]:
-            primes.append(i)
-            for j in xrange(2*i, limit, i):
-                sieve[j] = False
-
-    primeset = set(primes)
     best = (1, 1)
     for i in xrange(len(primes)):
         total = 0
@@ -1353,15 +1217,10 @@ def problem52():
     Find the smallest positive integer, x, such that 2x, 3x, 4x, 5x, and 6x,
     contain the same digits.
     """
-    def digits(number):
-        while number > 0:
-            yield number % 10
-            number /= 10
-
     i = 1
     while True:
         products = [i*j for j in xrange(1, 7)]
-        testdigits = [sorted(digits(p)) for p in products]
+        testdigits = [sorted(util.digits(p)) for p in products]
 
         for test in testdigits:
             if test != testdigits[0]:
@@ -1457,7 +1316,7 @@ def run_problem(number):
         result = globals()['problem' + str(number)]()
         print 'Problem ' + str(number) + ': ' + str(result)
     except KeyError:
-        print 'Problem ' + str(number) + ': Function not found'
+        pass
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
