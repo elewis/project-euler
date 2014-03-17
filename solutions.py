@@ -1245,7 +1245,8 @@ def problem53():
 
     It is not until n = 23, that a value exceeds one-million: 23C10 = 1144066.
 
-    How many, not necessarily distinct, values of  nCr, for 1 <= n <= 100, are greater than one-million?
+    How many, not necessarily distinct, values of  nCr, for 1 <= n <= 100,
+    are greater than one-million?
     """
     limit = 101
     fac = [1]
@@ -1261,6 +1262,22 @@ def problem53():
             if c(n, r) > 1000000:
                 count += 1
     return count
+
+def problem56():
+    """
+    A googol (10100) is a massive number: one followed by one-hundred zeros;
+    100100 is almost unimaginably large: one followed by two-hundred zeros.
+    Despite their size, the sum of the digits in each number is only 1.
+
+    Considering natural numbers of the form, a^b, where a, b < 100, what is
+    the maximum digital sum?
+    """
+    r = range(1, 101)
+    m = 0
+    for a in r:
+        for b in r:
+            m = max(m, sum(util.digits(pow(a, b))))
+    return m
 
 def problem59():
     """
