@@ -2,6 +2,7 @@
 
 import argparse
 import util
+import itertools
 
 def problem1():
     """
@@ -1383,6 +1384,38 @@ def problem59():
         if count * 1.0 / len(words) > 0.5:
             return sum(ascii)
 
+def problem60():
+    """
+    The primes 3, 7, 109, and 673, are quite remarkable. By taking any two
+    primes and concatenating them in any order the result will always be
+    prime. For example, taking 7 and 109, both 7109 and 1097 are prime. The
+    sum of these four primes, 792, represents the lowest sum for a set of
+    four primes with this property.
+
+    Find the lowest sum for a set of five primes for which any two primes
+    concatenate to produce another prime.
+    """
+    limit = 10000
+    primes, primeset = util.primes(limit)
+
+    def prime_concatable(p):
+        """
+        True iff any two primes in list p concatenated in any order
+        produce another prime.
+        """
+        for pair in itertools.combinations(p, 2):
+            pair = str(pair[0]), str(pair[1])
+            if int(pair[0] + pair[1]) not in primeset or \
+               int(pair[1] + pair[0]) not in primeset:
+                return False
+        return True
+
+    for group in itertools.combinations(primes, 4):
+        if prime_concatable(group):
+            print(group)
+    return 0
+
+
 def problem67():
     """
     By starting at the top of the triangle below and moving to adjacent
@@ -1409,6 +1442,43 @@ def problem67():
             row[i] += max(children[i], children[i+1])
         depth -= 1
     return triangle[0][0]
+
+def problem451():
+    """
+    Consider the number 15.
+    There are eight positive numbers less than 15 which are coprime to 15: 1, 2, 4, 7, 8, 11, 13, 14.
+    The modular inverses of these numbers modulo 15 are: 1, 8, 4, 13, 2, 11, 7, 14
+    because
+    1 *1 mod 15=1
+    2 *8=16 mod 15=1
+    4 *4=16 mod 15=1
+    7 *13=91 mod 15=1
+    11*11=121 mod 15=1
+    14*14=196 mod 15=1
+
+    Let I(n) be the largest positive number m smaller than n-1 such that the modular inverse of m modulo n equals m itself.
+    So I(15)=11.
+    Also I(100)=51 and I(7)=1.
+
+    Find sum(I(n)) for 3<=n<=2*10^7
+    """
+    limit = 2 * (10 ** 7) + 1
+    squares = [i*i for i in xrange(limit)]
+
+    def l(n):
+        m = n - 2
+        while m > 0:
+            if squares[m] % n == 1:
+                return m
+            m -= 1
+        return None
+
+    total = 0
+    for n in xrange(3, limit):
+        total += l(n)
+        if n % 1000 == 0:
+            print(n)
+    return total
 
 def run_problem(number):
     try:
