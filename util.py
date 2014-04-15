@@ -30,14 +30,28 @@ def permutations(s):
             for p in permutations(s[:i] + s[i+1:]):
                 yield s[i] + p
 
+def egcd(a, b):
+    """
+    Returns 3 item tuple d, x, y where d = ax + by
+    """
+    if a == 0:
+        return b, 1, 0
+    else:
+        d, x, y = egcd(b % a, a)
+        return d, y, x - (b/a) * y
+
 def gcd(a, b):
     """
-    Returns the greatest common denominator of a and b.
+    Returns the greatest common factor of a and b.
     """
-    # Implemented using Euclid's extended algorithm
-    while b != 0:
-        a, b = b, a % b
-    return a
+    return egcd(a, b)[0]
+
+def inverse(a, b):
+    """
+    Returns the inverse of a mod b
+    """
+    d, x, y = egcd(a, b)
+    return x % b if d == 1 else None
 
 def digits(n):
     """
