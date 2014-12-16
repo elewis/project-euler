@@ -126,28 +126,8 @@ def problem8():
     """
     Find the greatest product of five consecutive digits in the given number.
     """
-    number = (
-        "73167176531330624919225119674426574742355349194934"
-        "96983520312774506326239578318016984801869478851843"
-        "85861560789112949495459501737958331952853208805511"
-        "12540698747158523863050715693290963295227443043557"
-        "66896648950445244523161731856403098711121722383113"
-        "62229893423380308135336276614282806444486645238749"
-        "30358907296290491560440772390713810515859307960866"
-        "70172427121883998797908792274921901699720888093776"
-        "65727333001053367881220235421809751254540594752243"
-        "52584907711670556013604839586446706324415722155397"
-        "53697817977846174064955149290862569321978468622482"
-        "83972241375657056057490261407972968652414535100474"
-        "82166370484403199890008895243450658541227588666881"
-        "16427171479924442928230863465674813919123162824586"
-        "17866458359124566529476545682848912883142607690042"
-        "24219022671055626321111109370544217506941658960408"
-        "07198403850962455444362981230987879927244284909188"
-        "84580156166097919133875499200524063689912560717606"
-        "05886116467109405077541002256983155200055935729725"
-        "71636269561882670428252483600823257530420752963450"
-    )
+    with open('files/8/number.txt', 'r') as f:
+        number = f.read().strip()
     product = 0
     for i in xrange(len(number) - 4):
         digits = [int(char) for char in number[i:i+5]]
@@ -270,10 +250,8 @@ def problem13():
     Work out the first ten digits of the sum of the following one-hundred
     50-digit numbers.
     """
-    import requests, re
-
-    numbers = requests.get('http://www.projecteuler.net/problem=13').text
-    numbers = map(int, re.findall('([0-9]+)<br', numbers))
+    with open('files/13/numbers.txt', 'r') as f:
+        numbers = [int(line.strip()) for line in f]
     return str(sum(numbers))[:10]
 
 def problem14():
@@ -483,11 +461,11 @@ def problem22():
 
     What is the total of all the name scores in the file?
     """
-    import requests
-
-    names = requests.get('http://www.projecteuler.net/project/names.txt').text
-    names = map(lambda name: name[1:-1], names.strip().split(','))
-    names.sort()
+    with open('files/22/names.txt', 'r') as f:
+        names = []
+        for name in f.read().strip().split(','):
+            names.append(name.strip('"'))
+        names.sort()
 
     def score(name):
         ascii_offset = 96
@@ -750,7 +728,6 @@ def problem33():
 
     return reduce(lambda x,y: x*y, keep).denominator
 
-
 def problem34():
     """
     145 is a curious number, as 1! + 4! + 5! = 1 + 24 + 120 = 145.
@@ -962,10 +939,10 @@ def problem42():
 
     How many of the words in words.txt are triangle words?
     """
-    import requests
-
-    words = requests.get('http://projecteuler.net/project/words.txt').text
-    words = words.strip().split(',')
+    with open('files/42/words.txt', 'r') as f:
+        words = []
+        for word in f.read().strip().split(','):
+            words.append(word.strip('"'))
     score_count = {}
 
     # Generates all triangles up to and including t_n
@@ -1348,7 +1325,10 @@ def problem59():
     English words, decrypt the message and find the sum of the ASCII values
     in the original text.
     """
-    import requests
+    with open('files/59/cipher.txt', 'r') as f:
+        cipher = [int(i) for i in f.read().strip().split(',')]
+    with open('files/59/dictionary.txt', 'r') as f:
+        english = set(f.read().strip().split('\n'))
 
     def keys():
         alphabet = 'abcdefghijklmnopqrstuvwxyz'
@@ -1356,14 +1336,6 @@ def problem59():
             for b in alphabet:
                 for c in alphabet:
                     yield ord(a), ord(b), ord(c)
-
-    # Cipher ASCII codes given by the problem
-    cipher = requests.get('http://projecteuler.net/project/cipher1.txt').text
-    cipher = map(int, cipher.strip().split(','))
-
-    # English word dictionary (all uppercase, separated by newlines)
-    english = requests.get('http://inventwithpython.com/dictionary.txt').text
-    english = set(english.strip().split('\n'))
 
     for key in keys():
         # Decrypt bytes
@@ -1393,11 +1365,10 @@ def problem67():
 
     NOTE: This is a much more difficult version of problem 18.
     """
-    import requests
+    with open('files/67/triangle.txt', 'r') as f:
+        rows = f.read().strip().split('\n')
 
     triangle = []
-    rows = requests.get('http://projecteuler.net/project/triangle.txt').text
-    rows = rows.strip().split('\n')
     for row in rows:
         triangle.append(map(int, row.split(' ')))
 
@@ -1423,7 +1394,7 @@ def problem79():
     """
     graph = [[False for _ in xrange(10)] for _ in xrange(10)]
     nodes = set()
-    with open('files/keylog.txt', 'r') as f:
+    with open('files/79/keylog.txt', 'r') as f:
         for line in f:
             digits = [int(d) for d in list(line.strip())]
             graph[digits[0]][digits[1]] = True
