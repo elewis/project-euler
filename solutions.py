@@ -1410,6 +1410,51 @@ def problem67():
         depth -= 1
     return triangle[0][0]
 
+def problem79():
+    """
+    A common security method used for online banking is to ask the user for
+    three random characters from a passcode. For example, if the passcode was
+    531278, they may ask for the 2nd, 3rd, and 5th characters; the expected
+    reply would be: 317.
+
+    Given that the three characters are always asked for in order, analyse
+    the file so as to determine the shortest possible secret passcode of
+    unknown length.
+    """
+    graph = [[False for _ in xrange(10)] for _ in xrange(10)]
+    nodes = set()
+    with open('files/keylog.txt', 'r') as f:
+        for line in f:
+            digits = [int(d) for d in list(line.strip())]
+            graph[digits[0]][digits[1]] = True
+            graph[digits[1]][digits[2]] = True
+            nodes.update(digits)
+
+    def has_incoming(n, graph):
+        for i in xrange(len(graph)):
+            if graph[i][n]:
+                return True
+        return False
+
+    def edges(n, graph):
+        e = []
+        for i in xrange(len(graph[n])):
+            if graph[n][i]:
+                e.append(i)
+        return e
+
+    # https://en.wikipedia.org/wiki/Topological_sorting
+    L = []
+    S = set([i for i in xrange(10) if (not has_incoming(i, graph)) and i in nodes])
+    while len(S) > 0:
+        n = S.pop()
+        L.append(n)
+        for m in edges(n, graph):
+            graph[n][m] = False
+            if not has_incoming(m, graph):
+                S.add(m)
+    return ''.join((str(i) for i in L))
+
 def run_problem(number):
     try:
         result = globals()['problem' + str(number)]()
